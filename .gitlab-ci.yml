@@ -12,7 +12,8 @@ build:
 deploy:
   stage: deploy
   script:
-    - echo "Hier würden wir das Deployment anstoßen"
+    - echo "Verbinde zum Zielsystem"
+    - echo "Fuhre docker compose oder kubectl apply aus"
   when: manual
   only:
     - main
