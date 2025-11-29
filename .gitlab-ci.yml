@@ -1,19 +1,37 @@
 stages:
-  - build
+  - validate
   - deploy
  
-build:
-  stage: build
+variables:
+  DOCKER_COMPOSE_FILE: "Projekt/infra/docker-compose.yml"
+ 
+# 1. Validierung der docker-compose-Konfiguration
+validate_compose:
+  stage: validate
+  image: docker:27
+  services:
+    - docker:27-dind
   script:
-    - echo "Baue Container oder führe Tests aus"
+    - apk add --no-cache docker-cli-compose
+    - docker compose -f "$DOCKER_COMPOSE_FILE" config
   only:
     - main
  
-deploy:
+# 2. Deployment auf einem Zielhost (via SSH)
+deploy_to_server:
   stage: deploy
+  image: alpine:3.20
+  before_script:
+    - apk add --no-cache openssh-client
+    # SSH-Key aus CI/CD-Variable schreiben (z. B. DEPLOY_KEY)
+    - mkdir -p ~/.ssh
+    - echo "$DEPLOY_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
   script:
-    - echo "Verbinde zum Zielsystem"
-    - echo "Fuhre docker compose oder kubectl apply aus"
-  when: manual
+    - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && git pull"
+    - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && docker compose -f $DOCKER_COMPOSE_FILE pull"
+    - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && docker compose -f $DOCKER_COMPOSE_FILE up -d"
   only:
     - main
+  when: manual
