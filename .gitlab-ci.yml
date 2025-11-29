@@ -1,0 +1,18 @@
+stages:
+  - build
+  - deploy
+ 
+build:
+  stage: build
+  script:
+    - echo "Baue Container oder führe Tests aus"
+  only:
+    - main
+ 
+deploy:
+  stage: deploy
+  script:
+    - echo "Hier würden wir das Deployment anstoßen"
+  when: manual
+  only:
+    - main
