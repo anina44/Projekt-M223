@@ -3,7 +3,7 @@ stages:
   - deploy
  
 variables:
-  DOCKER_COMPOSE_FILE: "Projekt/infra/docker-compose.yml"
+  DOCKER_COMPOSE_FILE: "projekt-m210/infra/docker-compose.yml"
  
 # 1. Validierung der docker-compose-Konfiguration
 validate_compose:
