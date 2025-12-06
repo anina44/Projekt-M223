@@ -24,7 +24,7 @@ import ch.wiss.globenotes.model.Kategorie;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost", "http://localhost:80"})
 @RestController
 @RequestMapping("/reiseziele")
 public class ReisezielController {
