@@ -5,7 +5,7 @@ stages:
 
 # Pfad zu eurer docker-compose.yml
 variables:
-  DOCKER_COMPOSE_FILE: "GlobeNotes/backend/docker-compose.yml"
+  DOCKER_COMPOSE_FILE: "infra/docker-compose.yml"
 
 ###############################
 # 1) FRONTEND TESTS
