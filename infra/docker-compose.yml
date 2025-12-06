@@ -1,0 +1,73 @@
+version: "3.9"
+ 
+services:
+
+  wordpress:
+
+    image: wordpress:6.5-php8.2-apache
+
+    container_name: wp-app
+
+    depends_on:
+
+      - db
+
+    environment:
+
+      WORDPRESS_DB_HOST: db:3306
+
+      WORDPRESS_DB_USER: ${WP_DB_USER}
+
+      WORDPRESS_DB_PASSWORD: ${WP_DB_PASSWORD}
+
+      WORDPRESS_DB_NAME: ${WP_DB_NAME}
+
+    ports:
+
+      - "8080:80"
+
+    volumes:
+
+      - wp-data:/var/www/html
+
+    networks:
+
+      - wp-net
+ 
+  db:
+
+    image: mariadb:11
+
+    container_name: wp-db
+
+    environment:
+
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+
+      MARIADB_DATABASE: ${WP_DB_NAME}
+
+      MARIADB_USER: ${WP_DB_USER}
+
+      MARIADB_PASSWORD: ${WP_DB_PASSWORD}
+
+    volumes:
+
+      - db-data:/var/lib/mysql
+
+    networks:
+
+      - wp-net
+ 
+volumes:
+
+  wp-data:
+
+  db-data:
+ 
+networks:
+
+  wp-net:
+
+    driver: bridge
+
+ 

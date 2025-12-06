@@ -1,0 +1,44 @@
+stages:
+  - validate
+  - deploy
+ 
+# Global variable: Pfad zu eurer docker-compose.yml
+variables:
+  DOCKER_COMPOSE_FILE: "projekt-m210/infra/docker-compose.yml"
+ 
+# 1) VALIDATE-STAGE
+# Prüft, ob eure docker-compose.yml syntaktisch korrekt ist.
+validate_compose:
+  stage: validate
+  image: docker:27
+  services:
+    - docker:27-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  script:
+    - echo "Starte Validierung der Docker-Compose-Konfiguration..."
+    # Optional: Docker Compose Plugin installieren (bei Bedarf)
+    - apk add --no-cache docker-cli-compose
+    # Prüft die Compose-Datei und gibt eine zusammengeführte Config aus
+    - docker compose -f "$DOCKER_COMPOSE_FILE" config
+  only:
+    - main
+ 
+# 2) DEPLOY-STAGE (Simulation)
+# Diese Stage zeigt nur den Ablauf und läuft erfolgreich durch,
+# ohne wirklich auf einen externen Server zuzugreifen.
+simulate_deploy:
+  stage: deploy
+  image: alpine:3.20
+  script:
+    - echo "Simulierter Deploy-Job für LB02..."
+    - echo "Hier würden in einer echten Umgebung z.B. folgende Schritte erfolgen:"
+    - echo "1) SSH-Verbindung zu einem Docker-Host aufbauen"
+    - echo "2) git pull ausführen"
+    - echo "3) docker compose pull && docker compose up -d"
+    - echo "Da in der Schulumgebung kein echter Zielserver konfiguriert ist,"
+    - echo "läuft dieser Job nur als Simulation erfolgreich durch."
+  when: manual
+  only:
+    - main
