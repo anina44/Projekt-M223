@@ -1,34 +1,25 @@
 version: "3.8"
 
 services:
-  # ⬇️ Dein Spring-Boot Backend (GlobeNotes)
   globenotes-backend:
-    build: ../GlobeNotes/backend
+    build: ../GlobeNotes/backend      # Pfad zu deinem Backend mit Dockerfile
     container_name: globenotes-backend
     ports:
-      - "8080:8080"
+      - "8080:8080"                   # Backend nach außen
     volumes:
-      - globenotes_uploads:/uploads
-    networks:
-      - app-net
+      - h2-data:/app/data             # H2-Datei persistent
+      - uploads:/uploads              # dein Upload-Ordner, falls du den brauchst
+    restart: unless-stopped
 
-  # ⬇️ HIER deine bisherigen infra-Services reinkopieren
-  # z.B. Datenbank, Portainer, WordPress, whatever:
-  #
-  # db:
-  #   image: mariadb:11
-  #   environment:
-  #     ...
-  #   networks:
-  #     - app-net
-  #
-  # portainer:
-  #   image: portainer/portainer-ce
-  #   ...
-
-networks:
-  app-net:
+  globenotes-frontend:
+    build: ../GlobeNotes              # Pfad zum Frontend-Projekt (mit Dockerfile)
+    container_name: globenotes-frontend
+    ports:
+      - "80:80"                       # Frontend über http://localhost
+    depends_on:
+      - globenotes-backend
+    restart: unless-stopped
 
 volumes:
-  globenotes_uploads:
-  # ggf. weitere Volumes von deiner bisherigen infra-compose
+  h2-data:
+  uploads:
