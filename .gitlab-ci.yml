@@ -54,17 +54,22 @@ validate_compose:
 ###############################
 # 4) DEPLOY (Simulation)
 ###############################
-simulate_deploy:
+deploy-demo:
   stage: deploy
-  image: alpine:3.20
+  image: docker:27
+  services:
+    - docker:27-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
   script:
-    - echo "Simulierter Deploy-Job für LB02..."
-    - echo "Hier würden in einer echten Umgebung z.B. folgende Schritte erfolgen:"
-    - echo "1) SSH-Verbindung zu einem Docker-Host aufbauen"
-    - echo "2) git pull ausführen"
-    - echo "3) docker compose pull && docker compose up -d"
-    - echo "Da in der Schulumgebung kein echter Zielserver konfiguriert ist,"
-    - echo "läuft dieser Job nur als Simulation erfolgreich durch."
+    - echo "Starte Demo-Deploy mit Docker Compose..."
+    - apk add --no-cache docker-cli-compose
+    # optional: Images aktualisieren (falls Registry im Spiel wäre)
+    - docker compose -f "$DOCKER_COMPOSE_FILE" pull || true
+    # eigentlicher Demo-Deploy
+    - docker compose -f "$DOCKER_COMPOSE_FILE" up -d
+    - docker compose -f "$DOCKER_COMPOSE_FILE" ps
   when: manual
   only:
     - main
