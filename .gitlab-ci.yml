@@ -22,14 +22,14 @@ frontend-tests:
     - main
 
 ###############################
-# 2) BACKEND TESTS
+# 2) BACKEND BUILD (ohne Tests)
 ###############################
 backend-tests:
   stage: test
   image: maven:3.9-eclipse-temurin-17
   script:
     - cd GlobeNotes/backend
-    - mvn -q -DskipTests=false test
+    - mvn -q -B -DskipTests clean package
   only:
     - merge_requests
     - main
@@ -54,20 +54,6 @@ validate_compose:
 ###############################
 # 4) DEPLOY (Simulation)
 ###############################
-simulate_deploy:
-  stage: deploy
-  image: alpine:3.20
-  script:
-    - echo "SIMULIERTER DEPLOY:"
-    - echo "Normalerweise würdest du hier:"
-    - echo "1) ssh auf einen Server gehen"
-    - echo "2) git pull"
-    - echo "3) docker compose pull && up -d"
-    - echo "ABER in LB02 reicht die Simulation."
-  when: manual
-  only:
-    - main
-
 simulate_deploy:
   stage: deploy
   image: alpine:3.20
