@@ -1,73 +1,34 @@
-version: "3.9"
- 
+version: "3.8"
+
 services:
-
-  wordpress:
-
-    image: wordpress:6.5-php8.2-apache
-
-    container_name: wp-app
-
-    depends_on:
-
-      - db
-
-    environment:
-
-      WORDPRESS_DB_HOST: db:3306
-
-      WORDPRESS_DB_USER: ${WP_DB_USER}
-
-      WORDPRESS_DB_PASSWORD: ${WP_DB_PASSWORD}
-
-      WORDPRESS_DB_NAME: ${WP_DB_NAME}
-
+  # ⬇️ Dein Spring-Boot Backend (GlobeNotes)
+  globenotes-backend:
+    build: ../GlobeNotes/backend
+    container_name: globenotes-backend
     ports:
-
-      - "8080:80"
-
+      - "8080:8080"
     volumes:
-
-      - wp-data:/var/www/html
-
+      - globenotes_uploads:/uploads
     networks:
+      - app-net
 
-      - wp-net
- 
-  db:
+  # ⬇️ HIER deine bisherigen infra-Services reinkopieren
+  # z.B. Datenbank, Portainer, WordPress, whatever:
+  #
+  # db:
+  #   image: mariadb:11
+  #   environment:
+  #     ...
+  #   networks:
+  #     - app-net
+  #
+  # portainer:
+  #   image: portainer/portainer-ce
+  #   ...
 
-    image: mariadb:11
-
-    container_name: wp-db
-
-    environment:
-
-      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-
-      MARIADB_DATABASE: ${WP_DB_NAME}
-
-      MARIADB_USER: ${WP_DB_USER}
-
-      MARIADB_PASSWORD: ${WP_DB_PASSWORD}
-
-    volumes:
-
-      - db-data:/var/lib/mysql
-
-    networks:
-
-      - wp-net
- 
-volumes:
-
-  wp-data:
-
-  db-data:
- 
 networks:
+  app-net:
 
-  wp-net:
-
-    driver: bridge
-
- 
+volumes:
+  globenotes_uploads:
+  # ggf. weitere Volumes von deiner bisherigen infra-compose
