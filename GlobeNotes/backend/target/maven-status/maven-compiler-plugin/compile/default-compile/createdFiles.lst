@@ -7,4 +7,5 @@ ch\wiss\globenotes\config\CorsConfig$1.class
 ch\wiss\globenotes\model\Kategorie.class
 ch\wiss\globenotes\config\WebConfig.class
 ch\wiss\globenotes\GlobenotesApplication.class
+ch\wiss\globenotes\config\StaticResourceConfig.class
 ch\wiss\globenotes\repository\KategorieRepository.class

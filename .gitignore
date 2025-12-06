@@ -1,0 +1,4 @@
+# H2 Datenbanken ignorieren
+GlobeNotes/backend/data/
+*.mv.db
+*.lock.db
