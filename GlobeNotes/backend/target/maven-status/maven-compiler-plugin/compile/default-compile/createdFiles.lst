@@ -1,0 +1,10 @@
+ch\wiss\globenotes\controller\ReisezielController.class
+ch\wiss\globenotes\model\Reiseziel.class
+ch\wiss\globenotes\repository\ReisezielRepository.class
+ch\wiss\globenotes\config\CorsConfig.class
+ch\wiss\globenotes\config\WebConfig$1.class
+ch\wiss\globenotes\config\CorsConfig$1.class
+ch\wiss\globenotes\model\Kategorie.class
+ch\wiss\globenotes\config\WebConfig.class
+ch\wiss\globenotes\GlobenotesApplication.class
+ch\wiss\globenotes\repository\KategorieRepository.class

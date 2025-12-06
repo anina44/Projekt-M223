@@ -1,0 +1,74 @@
+
+.bild-container {
+  height: 150px;;
+  background-color: #f9f9f9;
+}
+
+.bild-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.info-zeile {
+  padding: 4px 8px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;;
+  font-size: 13px;
+}
+
+.highlight {
+  font-size: 13px;
+  padding: 4px 8px;
+}
+
+.reise-box {
+  width: 200px;
+  height: 280px;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  background: #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;;
+  position: relative;
+}
+
+.delete-button {
+    background: none;
+    color: rgb(255, 0, 0);
+    border: 3px;
+    text-align: center;
+    font-size: 10px;
+    padding-bottom: 7px;  
+}
+
+.delete-button:hover {
+    background: #d8d9f3;
+  }
+
+.reise-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+}
+
+.ort {
+  margin-top: 2px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.kategorie {
+  font-size: 13px;
+  padding: 2px 8px;
+}

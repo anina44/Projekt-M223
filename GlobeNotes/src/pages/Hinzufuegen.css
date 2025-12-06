@@ -1,0 +1,56 @@
+.form-container {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #f7f7f7;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+}
+
+.reise-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reise-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+}
+
+.reise-form input[type="text"],
+.reise-form textarea,
+.reise-form input[type="file"] {
+  padding: 2;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.reise-form button {
+  padding: 10px;
+  background: rgb(173, 235, 201);
+  color: rgb(7, 7, 7);
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.reise-form button:hover {
+  background: rgb(144, 224, 172);
+}
+
+.Kategorie {
+  border-radius: 6px;
+}
+
+.foto {
+  font-size: 14px;
+}
+
+.wählen {
+  font-size: 14px;
+}
