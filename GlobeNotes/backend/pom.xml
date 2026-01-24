@@ -29,7 +29,7 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!-- ✅ HINZUGEFÜGT: JPA (für Entities + JpaRepository) -->
+		<!-- JPA (Entities + JpaRepository) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -39,6 +39,13 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<!-- ✅ Swagger UI (springdoc für Spring Boot 3) -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.5.0</version>
 		</dependency>
 
 		<!-- H2 DB -->
@@ -70,7 +77,7 @@
 			<version>20240303</version>
 		</dependency>
 
-		<!-- ✅ HINZUGEFÜGT: JWT (JJWT) für deine JWTService Klasse -->
+		<!-- JWT (JJWT) für deine JwtService Klasse -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
