@@ -5,6 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.FetchType;
+
 
 @Entity
 public class Reiseziel {
@@ -22,6 +25,10 @@ public class Reiseziel {
     private double latitude;
     private double longitude;
 
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private AppUser owner;
 
     @ManyToOne
     private Kategorie kategorie;
@@ -96,4 +103,13 @@ public class Reiseziel {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+
+    public AppUser getOwner() {
+        return owner;
+    }
+
+    public void setOwner(AppUser owner) {
+        this.owner = owner;
+    }
+
 }

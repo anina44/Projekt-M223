@@ -24,9 +24,13 @@ import ch.wiss.globenotes.model.Kategorie;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-@CrossOrigin(origins = {"http://localhost", "http://localhost:80"})
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import ch.wiss.globenotes.model.AppUser;
+
+
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost", "http://localhost:80"})
 @RestController
-@RequestMapping("/reiseziele")
+@RequestMapping("/api/reiseziele")
 public class ReisezielController {
 
     @Autowired
@@ -38,37 +42,46 @@ public class ReisezielController {
     /** 
      * Liefert alle Reiseziele zurück.
      */
-    @GetMapping("/")
-    public List<Reiseziel> getAlle() {
-        return repository.findAll();
+    @GetMapping
+    public List<Reiseziel> getMeine(@AuthenticationPrincipal AppUser user) {
+        return repository.findByOwnerId(user.getId());
     }
+
 
     /** 
      * Liefert ein einzelnes Reiseziel basierend auf der ID.
-     */
+
     @PostMapping("/upload")
     public ResponseEntity<String> uploadReiseziel(@RequestBody Reiseziel reiseziel) {
         return ResponseEntity.ok("Upload erfolgreich");
-    }
+    }*/
 
     /** 
      * Liefert ein einzelnes Reiseziel basierend auf der ID.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> loeschen(@PathVariable Long id) {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-            return ResponseEntity.ok().build();
-        } else {
+    public ResponseEntity<Void> loeschen(@AuthenticationPrincipal AppUser user, @PathVariable Long id) {
+
+        Reiseziel item = repository.findById(id).orElse(null);
+        if (item == null) {
             return ResponseEntity.notFound().build();
         }
+
+        if (item.getOwner() == null || !item.getOwner().getId().equals(user.getId())) {
+            return ResponseEntity.status(403).build();
+        }
+
+        repository.delete(item);
+        return ResponseEntity.ok().build();
     }
+
 
     /** 
      * Lädt ein Reiseziel mit einem Bild hoch.
      */
     @PostMapping(value = "/upload", consumes = {"multipart/form-data"})
     public ResponseEntity<Reiseziel> uploadReisezielMitBild(
+            @AuthenticationPrincipal AppUser user,
             @RequestParam("ort") String ort,
             @RequestParam("jahr") String jahr,
             @RequestParam("highlights") String highlights,
@@ -91,6 +104,8 @@ public class ReisezielController {
             neuesZiel.setHighlights(highlights);
             neuesZiel.setKategorie(gespeicherteKategorie);
             neuesZiel.setBildPfad("/uploads/" + eindeutigerName);
+            neuesZiel.setOwner(user);
+
 
             double[] koordinaten = ermittleKoordinaten(ort);
             neuesZiel.setLatitude(koordinaten[0]);
