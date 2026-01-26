@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaSignInAlt } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -36,7 +36,7 @@ const Login = () => {
   return (
     <div style={{ maxWidth: "320px", margin: "80px auto" }}>
       <h2>
-        <FaSignInAlt /> Login
+        <FaUser /> Login
       </h2>
 
       <form onSubmit={handleSubmit}>
