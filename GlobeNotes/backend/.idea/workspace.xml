@@ -5,28 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="988ed4a0-a284-4fa0-aadb-46ca5421565b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/data/reiseziele.trace.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ch/wiss/globenotes/GlobenotesApplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ch/wiss/globenotes/config/CorsConfig$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ch/wiss/globenotes/config/CorsConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ch/wiss/globenotes/config/StaticResourceConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ch/wiss/globenotes/config/WebConfig$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ch/wiss/globenotes/config/WebConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ch/wiss/globenotes/controller/ReisezielController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ch/wiss/globenotes/model/Kategorie.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ch/wiss/globenotes/model/Reiseziel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ch/wiss/globenotes/repository/KategorieRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ch/wiss/globenotes/repository/ReisezielRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/globenotes-0.0.1-SNAPSHOT.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/globenotes-0.0.1-SNAPSHOT.jar.original" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/ch/UnitTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../pipelines/DEPLOYMENT-NOTIZEN.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,12 +22,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;anina44&quot;
-  }
-}</component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {}
+}]]></component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/anina44/Projekt-M223.git&quot;,
@@ -71,6 +47,7 @@
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "Spring Boot.GlobenotesApplication.executor": "Run",
@@ -78,6 +55,7 @@
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Dev/projekt-m210/GlobeNotes/backend/pom.xml",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "MavenSettings",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -99,7 +77,6 @@
     <attachedChunks>
       <set>
         <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.138" />
       </set>
     </attachedChunks>
   </component>
@@ -111,7 +88,8 @@
       <option name="presentableId" value="Default" />
       <updated>1769246787257</updated>
       <workItem from="1769246788277" duration="128000" />
-      <workItem from="1769246945076" duration="1695000" />
+      <workItem from="1769246945076" duration="7204000" />
+      <workItem from="1769445830847" duration="10000" />
     </task>
     <servers />
   </component>
