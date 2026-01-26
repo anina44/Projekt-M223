@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FaPlusCircle, FaGlobeEurope, FaMapMarkerAlt, FaHome } from "react-icons/fa";
+import { FaPlusCircle, FaGlobeEurope, FaMapMarkerAlt, FaHome, FaSignInAlt } from "react-icons/fa";
 
 export default function Navigation() {
   return (
@@ -27,6 +27,12 @@ export default function Navigation() {
           <Link to="/reiseziel">
             <FaMapMarkerAlt size={44} style={{ marginRight: "8px" }} />
             Reiseziel
+          </Link>
+        </li>
+        <li>
+          <Link to="/login">
+            <FaSignInAlt  size={44} style={{ marginRight: "8px" }} />
+            Login
           </Link>
         </li>
       </ul>
