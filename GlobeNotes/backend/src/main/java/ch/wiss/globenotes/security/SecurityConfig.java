@@ -68,8 +68,10 @@ public class SecurityConfig {
         public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Frontend läuft bei dir über NGINX auf http://localhost (Port 80)
-        config.setAllowedOrigins(List.of("http://localhost"));
+        config.setAllowedOriginPatterns(List.of(
+        "http://localhost",
+        "http://localhost:*"
+));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
