@@ -2,10 +2,8 @@ import { useState, useEffect } from "react"
 import Navigation from "./Navigation";
 import Reisebox from "../components/Reisebox";
 import WeltkartePage from "./WeltkartePage";
+import AuthTest from "../components/auth-test";
 
-// Home.jsx
-// Diese Seite zeigt die Reiseziele des Nutzers an und ermöglicht das Löschen von Zielen.
-// Sie enthält auch eine Sortier- und Filterfunktion für die Reiseziele.  
 export default function Home(){
   const [reiseziele, setReiseziele] = useState([]);
   const [sortierung, setSortierung] = useState("standard"); // Standard-Sortierung nach Ort
