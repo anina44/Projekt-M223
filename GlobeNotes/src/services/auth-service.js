@@ -1,21 +1,15 @@
-import api from "./api-client";
+import { apiFetch, setToken, clearToken } from "./api-client";
 
-export const login = async (usernameOrEmail, password) => {
-  const response = await api.post("/api/auth/login", {
-    usernameOrEmail,
-    password,
+export async function login(usernameOrEmail, password) {
+  const data = await apiFetch("/api/auth/login", {
+    method: "POST",
+    body: { usernameOrEmail, password },
   });
 
-  // Token speichern
-  localStorage.setItem("token", response.data.token);
+  if (data?.token) setToken(data.token);
+  return data;
+}
 
-  return response.data;
-};
-
-export const logout = () => {
-  localStorage.removeItem("token");
-};
-
-export const isLoggedIn = () => {
-  return !!localStorage.getItem("token");
-};
+export function logout() {
+  clearToken();
+}
