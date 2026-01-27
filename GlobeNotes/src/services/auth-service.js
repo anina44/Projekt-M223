@@ -1,12 +1,17 @@
-import { apiFetch, setToken, clearToken } from "./api-client";
+import api, { setToken, clearToken } from "./api-client";
 
 export async function login(usernameOrEmail, password) {
-  const data = await apiFetch("/api/auth/login", {
-    method: "POST",
-    body: { usernameOrEmail, password },
+  const response = await api.post("/api/auth/login", {
+    usernameOrEmail,
+    password,
   });
 
-  if (data?.token) setToken(data.token);
+  const data = response.data;
+
+  if (data?.token) {
+    setToken(data.token);
+  }
+
   return data;
 }
 
