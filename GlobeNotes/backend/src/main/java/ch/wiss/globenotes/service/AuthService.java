@@ -49,7 +49,10 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequestDTO req) {
-        AppUser user = userRepo.findByEmail(req.getEmail())
+        String uoe = req.getUsernameOrEmail();
+
+        AppUser user = userRepo.findByEmail(uoe)
+                .or(() -> userRepo.findByUsername(uoe))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
 
         if (!encoder.matches(req.getPassword(), user.getPasswordHash())) {
@@ -57,11 +60,6 @@ public class AuthService {
         }
 
         String token = jwtService.generateToken(user);
-        return new AuthResponse(
-                token,
-                user.getId(),
-                user.getUsername(),
-                user.getRole().name()
-        );
+        return new AuthResponse(token, user.getId(), user.getUsername(), user.getRole().name());
     }
 }

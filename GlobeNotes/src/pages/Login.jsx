@@ -1,13 +1,13 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { FaUser } from "react-icons/fa";
-import { AuthContext } from "../auth/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { login } from "../services/auth-service";
 
 const Login = () => {
-  const { login, isLoading } = useContext(AuthContext);
-
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,51 +15,44 @@ const Login = () => {
 
     try {
       await login(usernameOrEmail, password);
-      alert("Login erfolgreich!");
-      // optional: navigate("/") oder navigate("/reiseziel")
+      navigate("/reiseziel"); // oder "/"
     } catch (err) {
-      const status = err?.response?.status; // falls axios
-      // falls fetch: err hat status nicht -> dann setz es im auth-service
-      if (status === 401) setError("Falsche Zugangsdaten");
-      else if (status === 403) setError("Login ist blockiert (Backend Security/CSRF).");
-      else setError("Login fehlgeschlagen (Server/Verbindung).");
+      setError("Falsche Zugangsdaten");
     }
   };
 
   return (
-    <div style={{ maxWidth: "320px", margin: "80px auto" }}>
-      <h2>
-        <FaUser /> Login
-      </h2>
+      <div style={{ maxWidth: "320px", margin: "80px auto" }}>
+        <h2>
+          <FaUser /> Login
+        </h2>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="E-Mail oder Username"
-          value={usernameOrEmail}
-          onChange={(e) => setUsernameOrEmail(e.target.value)}
-          required
-          style={{ width: "100%", marginBottom: "10px" }}
-          disabled={isLoading}
-        />
+        <form onSubmit={handleSubmit}>
+          <input
+              type="text"
+              placeholder="E-Mail oder Username"
+              value={usernameOrEmail}
+              onChange={(e) => setUsernameOrEmail(e.target.value)}
+              required
+              style={{ width: "100%", marginBottom: "10px" }}
+          />
 
-        <input
-          type="password"
-          placeholder="Passwort"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          style={{ width: "100%", marginBottom: "10px" }}
-          disabled={isLoading}
-        />
+          <input
+              type="password"
+              placeholder="Passwort"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{ width: "100%", marginBottom: "10px" }}
+          />
 
-        <button type="submit" style={{ width: "100%" }} disabled={isLoading}>
-          {isLoading ? "Lädt..." : "Login"}
-        </button>
-      </form>
+          <button type="submit" style={{ width: "100%" }}>
+            Login
+          </button>
+        </form>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    </div>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+      </div>
   );
 };
 
