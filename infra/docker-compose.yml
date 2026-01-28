@@ -1,25 +1,43 @@
 version: "3.8"
 
 services:
+  db:
+    image: postgres:16-alpine
+    container_name: globenotes-db
+    environment:
+      POSTGRES_DB: globenotes
+      POSTGRES_USER: globenotes
+      POSTGRES_PASSWORD: globenotes
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
   globenotes-backend:
-    build: ../GlobeNotes/backend      # Pfad zu deinem Backend mit Dockerfile
+    build: ../GlobeNotes/backend
     container_name: globenotes-backend
     ports:
-      - "8080:8080"                   # Backend nach außen
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/globenotes
+      SPRING_DATASOURCE_USERNAME: globenotes
+      SPRING_DATASOURCE_PASSWORD: globenotes
     volumes:
-      - h2-data:/app/data             # H2-Datei persistent
-      - uploads:/uploads              # dein Upload-Ordner, falls du den brauchst
+      - uploads:/uploads
+    depends_on:
+      - db
     restart: unless-stopped
 
   globenotes-frontend:
-    build: ../GlobeNotes              # Pfad zum Frontend-Projekt (mit Dockerfile)
+    build: ../GlobeNotes
     container_name: globenotes-frontend
     ports:
-      - "80:80"                       # Frontend über http://localhost
+      - "80:80"
     depends_on:
       - globenotes-backend
     restart: unless-stopped
 
 volumes:
-  h2-data:
+  pgdata:
   uploads:
