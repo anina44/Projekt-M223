@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { FaUser } from "react-icons/fa";
+import { AuthContext } from "../auth/AuthContext";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const { login, isLoading } = useContext(AuthContext);
+
+  const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -11,25 +14,15 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Login fehlgeschlagen");
-      }
-
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
-
-      // später: redirect / AuthContext setzen
+      await login(usernameOrEmail, password);
       alert("Login erfolgreich!");
+      // optional: navigate("/") oder navigate("/reiseziel")
     } catch (err) {
-      setError("Falsche Zugangsdaten");
+      const status = err?.response?.status; // falls axios
+      // falls fetch: err hat status nicht -> dann setz es im auth-service
+      if (status === 401) setError("Falsche Zugangsdaten");
+      else if (status === 403) setError("Login ist blockiert (Backend Security/CSRF).");
+      else setError("Login fehlgeschlagen (Server/Verbindung).");
     }
   };
 
@@ -41,12 +34,13 @@ const Login = () => {
 
       <form onSubmit={handleSubmit}>
         <input
-          type="email"
-          placeholder="E-Mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          placeholder="E-Mail oder Username"
+          value={usernameOrEmail}
+          onChange={(e) => setUsernameOrEmail(e.target.value)}
           required
           style={{ width: "100%", marginBottom: "10px" }}
+          disabled={isLoading}
         />
 
         <input
@@ -56,10 +50,11 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
           style={{ width: "100%", marginBottom: "10px" }}
+          disabled={isLoading}
         />
 
-        <button type="submit" style={{ width: "100%" }}>
-          Login
+        <button type="submit" style={{ width: "100%" }} disabled={isLoading}>
+          {isLoading ? "Lädt..." : "Login"}
         </button>
       </form>
 
