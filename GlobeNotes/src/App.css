@@ -109,3 +109,19 @@ hr {
   justify-content: center;
   padding: 20px;
 }
+
+.navLogin a {
+  color: #4f6ef7;
+}
+
+.navLogin.isUser a {
+  color: #2563eb;
+}
+
+.navLogin.isAdmin a {
+  color: #dc2626;
+}
+
+.navLogin a svg {
+  fill: currentColor;
+}
