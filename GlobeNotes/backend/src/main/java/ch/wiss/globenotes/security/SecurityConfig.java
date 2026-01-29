@@ -2,6 +2,7 @@ package ch.wiss.globenotes.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,41 +23,41 @@ public class SecurityConfig {
         this.jwtAuthFilter = jwtAuthFilter;
     }
 
+    /**
+     * Wichtig: Order setzen, falls irgendwo (unbewusst) noch eine zweite FilterChain existiert.
+     */
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Order(1)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
-
-                // ❗ wichtig: kein Basic / kein Form-Login
                 .httpBasic(b -> b.disable())
                 .formLogin(f -> f.disable())
-
-                .sessionManagement(sm ->
-                        sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-                        // Auth-Endpunkte
+                        // ✅ Auth frei
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // H2 Console
-                        .requestMatchers("/h2-console/**").permitAll()
-
-                        // Swagger / OpenAPI (springdoc – korrekt)
+                        // ✅ Swagger / OpenAPI frei (ALLE Varianten)
                         .requestMatchers(
-                                "/swagger-ui.html",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**"
+                                "/swagger-ui.html",
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs.yaml",
+                                "/swagger-resources/**",
+                                "/webjars/**"
                         ).permitAll()
 
-                        // alles andere nur mit JWT
+                        // oft nötig, damit Security nicht komisch reagiert
+                        .requestMatchers("/error").permitAll()
+
+                        // 🔒 Rest braucht JWT
                         .anyRequest().authenticated()
                 )
-
-                // für H2 Console
-                .headers(h -> h.frameOptions(f -> f.disable()))
 
                 // JWT Filter
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -64,24 +65,20 @@ public class SecurityConfig {
         return http.build();
     }
 
-        @Bean
-        public CorsConfigurationSource corsConfigurationSource() {
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOriginPatterns(List.of(
-        "http://localhost",
-        "http://localhost:*"
-));
-
+                "http://localhost",
+                "http://localhost:*"
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-
-        // Wenn ihr Bearer JWT nutzt (Authorization Header), ist allowCredentials NICHT nötig.
-        // Setze es nur auf true, wenn ihr Cookies/Sessions mit Credentials verwendet.
         config.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
-        }
+    }
 }
