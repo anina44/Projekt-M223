@@ -1,40 +1,35 @@
 import { useState, useEffect } from "react"
-import Navigation from "./Navigation";
 import Reisebox from "../components/Reisebox";
-import WeltkartePage from "./WeltkartePage";
-import AuthTest from "../components/auth-test";
 
-export default function Home(){
-  const [reiseziele, setReiseziele] = useState([]);
-  const [sortierung, setSortierung] = useState("standard"); // Standard-Sortierung nach Ort
-  const [kategorie, setKategorie] = useState("");
 
-  // Laden der Reiseziele beim ersten Rendern
-useEffect(() => {
-  fetch("http://localhost:8080/reiseziele/")
-    .then((res) => res.json())
-    .then((data) => {
-      setReiseziele(data);
-      console.log("Geladene Reiseziele:", data); // <--- HIER
-    })
-    .catch((err) => console.error("Fehler beim Laden:", err));
-}, []);
+import api from "../services/api-client"; // Pfad anpassen!
 
- const handleDelete = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:8080/reiseziele/${id}`, {
-        method: "DELETE",
-      });
+export default function Home() {
+    const [reiseziele, setReiseziele] = useState([]);
+    const [sortierung, setSortierung] = useState("standard");
+    const [kategorie, setKategorie] = useState("");
 
-      if (response.ok) {
-        setReiseziele((prev) => prev.filter((ziel) => ziel.id !== id));
-      } else {
-        console.error("Löschen fehlgeschlagen");
-      }
-    } catch (error) {
-      console.error("Netzwerkfehler beim Löschen:", error);
-    }
-  };
+    useEffect(() => {
+        api.get("/api/reiseziele")
+            .then((res) => {
+                const data = res.data;
+                setReiseziele(Array.isArray(data) ? data : []);
+                console.log("Geladene Reiseziele:", data);
+            })
+            .catch((err) => {
+                console.error("Fehler beim Laden:", err);
+                setReiseziele([]);
+            });
+    }, []);
+
+    const handleDelete = async (id) => {
+        try {
+            await api.delete(`/api/reiseziele/${id}`);
+            setReiseziele((prev) => prev.filter((ziel) => ziel.id !== id));
+        } catch (err) {
+            console.error("Löschen fehlgeschlagen:", err);
+        }
+    };
 
   // Alle Kategorien für das Dropdown ermitteln
   const kategorien = Array.from(
