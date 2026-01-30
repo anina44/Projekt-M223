@@ -67,7 +67,7 @@ export default function Navigation() {
 
               {userRole === "ADMIN" && (
                 <li className="navItem">
-                  <Link to="/reiseziele">
+                  <Link to="/reiseziel">
                     <FaMapMarkerAlt size={44} style={{ marginRight: "8px" }} />
                     Reiseziele
                   </Link>

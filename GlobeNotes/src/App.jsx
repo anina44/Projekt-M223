@@ -1,7 +1,7 @@
 import "./App.css";
 import Home from "./pages/Home";
 import Hinzufügen from "./pages/Hinzufügen";
-import Reiseziele from "./pages/Reiseziele";
+import Reiseziel from "./pages/Reiseziel";
 import Layout from "./pages/Layout";
 import WeltkartePage from "./pages/WeltkartePage";
 import Login from "./pages/Login";
@@ -26,7 +26,7 @@ function App() {
 
                 {/* admin only */}
                 <Route element={<AdminProtectedRoute />}>
-                    <Route path="reiseziele" element={<Reiseziele />} />
+                    <Route path="reiseziele" element={<Reiseziel />} />
                 </Route>
             </Route>
         </Routes>

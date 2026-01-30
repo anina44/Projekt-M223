@@ -1,14 +1,22 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { getToken } from "../services/api-client";
-import { useContext } from "react";
-import { AuthContext } from "./AuthContext";
 
 const AdminProtectedRoute = () => {
     const token = getToken();
-    const { user } = useContext(AuthContext);
 
     if (!token) return <Navigate to="/login" replace />;
-    if (user?.role !== "ADMIN") return <Navigate to="/" replace />;
+
+    // Decode token to get role
+    let userRole = null;
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        userRole = payload.role;
+    } catch (error) {
+        console.error("Failed to decode token:", error);
+        return <Navigate to="/login" replace />;
+    }
+
+    if (userRole !== "ADMIN") return <Navigate to="/home" replace />;
 
     return <Outlet />;
 };

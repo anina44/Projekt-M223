@@ -1,5 +1,5 @@
 package ch.wiss.globenotes.security;
-
+ 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -11,38 +11,35 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
+ 
 import org.springframework.http.HttpMethod;
 import java.util.List;
-
+ 
 @Configuration
 public class SecurityConfig {
-
+ 
     private final JwtAuthFilter jwtAuthFilter;
-
+ 
     public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
-
-    /**
-     * Wichtig: Order setzen, falls irgendwo (unbewusst) noch eine zweite FilterChain existiert.
-     */
+ 
     @Bean
     @Order(1)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+ 
         http
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(b -> b.disable())
                 .formLogin(f -> f.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
+ 
                 .authorizeHttpRequests(auth -> auth
                         // ✅ Auth frei
                         .requestMatchers("/api/auth/**").permitAll()
-
-                        // ✅ Swagger / OpenAPI frei (ALLE Varianten)
+ 
+                        // ✅ Swagger / OpenAPI frei
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
@@ -52,26 +49,40 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/webjars/**"
                         ).permitAll()
-
+ 
+                        // ✅ Bilder öffentlich (damit Frontend sie laden kann)
                         .requestMatchers("/uploads/**").permitAll()
-
+ 
+                        // =========================
+                        // ✅ Reiseziele Regeln
+                        // =========================
+ 
+                        // GET: jeder eingeloggte User
                         .requestMatchers(HttpMethod.GET, "/api/reiseziele/**").authenticated()
-                        .requestMatchers("/api/reiseziele/**").hasRole("ADMIN")
-
+ 
+                        // POST (inkl. /upload): USER + ADMIN
+                        .requestMatchers(HttpMethod.POST, "/api/reiseziele/**").hasAnyRole("USER", "ADMIN")
+ 
+                        // PUT: USER + ADMIN (falls du edit endpoints hast)
+                        .requestMatchers(HttpMethod.PUT, "/api/reiseziele/**").hasAnyRole("USER", "ADMIN")
+ 
+                        // DELETE: nur ADMIN (oder ändere zu hasAnyRole wenn USER löschen darf)
+                        .requestMatchers(HttpMethod.DELETE, "/api/reiseziele/**").hasRole("ADMIN")
+ 
                         // 🔒 Rest braucht JWT
                         .anyRequest().authenticated()
                 )
-
+ 
                 // JWT Filter
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
+ 
         return http.build();
     }
-
+ 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-
+ 
         config.setAllowedOriginPatterns(List.of(
                 "http://localhost",
                 "http://localhost:*"
@@ -79,7 +90,7 @@ public class SecurityConfig {
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(false);
-
+ 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
