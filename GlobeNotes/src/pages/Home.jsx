@@ -1,26 +1,31 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import Reisebox from "../components/Reisebox";
 
 
 import api from "../services/api-client"; // Pfad anpassen!
+import { AuthContext } from "../auth/AuthContext";
 
 export default function Home() {
     const [reiseziele, setReiseziele] = useState([]);
     const [sortierung, setSortierung] = useState("standard");
     const [kategorie, setKategorie] = useState("");
+    const { user } = useContext(AuthContext);
 
-    useEffect(() => {
-        api.get("/api/reiseziele")
-            .then((res) => {
-                const data = res.data;
-                setReiseziele(Array.isArray(data) ? data : []);
-                console.log("Geladene Reiseziele:", data);
-            })
-            .catch((err) => {
-                console.error("Fehler beim Laden:", err);
-                setReiseziele([]);
-            });
-    }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return; // noch nicht eingeloggt
+
+    api.get("/api/reiseziele")
+      .then((res) => {
+        const data = res.data;
+        setReiseziele(Array.isArray(data) ? data : []);
+      })
+      .catch((err) => {
+        console.error("Fehler beim Laden:", err);
+        setReiseziele([]);
+      });
+  }, []);
+
 
     const handleDelete = async (id) => {
         try {
@@ -68,31 +73,30 @@ const sortierteReiseziele = [...gefilterteReiseziele].sort((a, b) => {
         Kategorie:{" "}
         <select value={kategorie} onChange={e => setKategorie(e.target.value)}>
   <option value="">Alle</option>
-  <option value="Städtetrip">Städtetrip</option>
-  <option value="Strandurlaub">Strandurlaub</option>
-  <option value="Abenteuer">Abenteuer</option>
-  <option value="Natur">Natur</option>
-  <option value="Historisch">Historisch</option>
   {kategorien.map((k, i) => (
     <option key={i} value={k}>{k}</option>
   ))}
-</select>
+        </select>
       </label>
 
 
         <div className="reise-container">
-            {sortierteReiseziele.map((ziel, i) => (
-              <Reisebox
-                key={ziel.id || i}
-                id={ziel.id}
-                ort={ziel.ort}
-                jahr={ziel.jahr}
-                highlights={ziel.highlights}
-                kategorie={ziel.kategorie}
-                bildPfad={ziel.bildPfad}
-                onDelete={handleDelete}
-              />
-            ))}
+            {sortierteReiseziele.length === 0 ? (
+                <p>Keine Reiseziele vorhanden. Füge eines hinzu!</p>
+            ) : (
+                sortierteReiseziele.map((ziel, i) => (
+                    <Reisebox
+                        key={ziel.id || i}
+                        id={ziel.id}
+                        ort={ziel.ort}
+                        jahr={ziel.jahr}
+                        highlights={ziel.highlights}
+                        kategorie={ziel.kategorie}
+                        bildPfad={ziel.bildPfad}
+                        onDelete={handleDelete}
+                    />
+                ))
+            )}
         </div>
     </div>
   );

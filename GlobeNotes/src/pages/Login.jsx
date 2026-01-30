@@ -15,7 +15,7 @@ const Login = () => {
 
     try {
       await login(usernameOrEmail, password);
-      navigate("/reiseziel"); // oder "/"
+      navigate("/home"); // oder "/"
     } catch (err) {
       setError("Falsche Zugangsdaten");
     }

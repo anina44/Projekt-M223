@@ -12,6 +12,21 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (token) {
+      try {
+        // Decode JWT payload (base64)
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        setUser({
+          username: payload.username,
+          role: payload.role,
+        });
+      } catch (error) {
+        console.error("Failed to decode token:", error);
+        setUser(null);
+      }
+    } else {
+      setUser(null);
+    }
   }, [token]);
 
   /**

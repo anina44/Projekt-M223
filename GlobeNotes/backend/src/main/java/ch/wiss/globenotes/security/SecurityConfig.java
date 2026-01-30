@@ -12,6 +12,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import org.springframework.http.HttpMethod;
 import java.util.List;
 
 @Configuration
@@ -52,8 +53,10 @@ public class SecurityConfig {
                                 "/webjars/**"
                         ).permitAll()
 
-                        // oft nötig, damit Security nicht komisch reagiert
-                        .requestMatchers("/error").permitAll()
+                        .requestMatchers("/uploads/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/reiseziele/**").authenticated()
+                        .requestMatchers("/api/reiseziele/**").hasRole("ADMIN")
 
                         // 🔒 Rest braucht JWT
                         .anyRequest().authenticated()

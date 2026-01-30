@@ -44,6 +44,14 @@ public class JwtService {
         return Long.parseLong(sub);
     }
 
+    public String extractRole(String token) {
+        return Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
+    }
+
     public boolean isValid(String token) {
         try {
             Jwts.parser()

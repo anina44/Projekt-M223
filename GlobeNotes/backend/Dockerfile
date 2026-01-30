@@ -1,7 +1,12 @@
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
-COPY target/globenotes-0.0.1-SNAPSHOT.jar app.jar
+# Install Maven
+RUN apt-get update && apt-get install -y maven
+
+# Copy source and build
+COPY . .
+RUN mvn clean package -DskipTests
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "target/globenotes-0.0.1-SNAPSHOT.jar"]

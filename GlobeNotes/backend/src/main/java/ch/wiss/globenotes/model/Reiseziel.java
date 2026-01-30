@@ -8,6 +8,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.FetchType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 public class Reiseziel {
@@ -28,9 +30,10 @@ public class Reiseziel {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
+    @JsonIgnore
     private AppUser owner;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Kategorie kategorie;
 
      // Getter & Setter

@@ -10,11 +10,24 @@ import {
 
 import { getToken } from "../services/api-client";
 import { logout } from "../services/auth-service";
+import { useContext } from "react";
+import { AuthContext } from "../auth/AuthContext";
 
 export default function Navigation() {
   const navigate = useNavigate();
   const token = getToken();
   const isAuthenticated = !!token;
+
+  // Decode token to get role
+  let userRole = null;
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      userRole = payload.role;
+    } catch (error) {
+      console.error("Failed to decode token:", error);
+    }
+  }
 
   const handleLogout = () => {
     logout();              // Token aus localStorage entfernen
@@ -29,33 +42,39 @@ export default function Navigation() {
   return (
       <nav className="main-nav">
         <ul>
-          <li className="navItem">
-            <Link to="/">
-              <FaHome size={44} style={{ marginRight: "8px" }} />
-              Startseite
-            </Link>
-          </li>
+          {isAuthenticated && (
+            <>
+              <li className="navItem">
+                <Link to="/home">
+                  <FaHome size={44} style={{ marginRight: "8px" }} />
+                  Startseite
+                </Link>
+              </li>
 
-          <li className="navItem">
-            <Link to="/hinzufuegen">
-              <FaPlusCircle size={44} style={{ marginRight: "8px" }} />
-              Hinzufügen
-            </Link>
-          </li>
+              <li className="navItem">
+                <Link to="/hinzufuegen">
+                  <FaPlusCircle size={44} style={{ marginRight: "8px" }} />
+                  Hinzufügen
+                </Link>
+              </li>
 
-          <li className="navItem">
-            <Link to="/weltkartepage">
-              <FaGlobeEurope size={44} style={{ marginRight: "8px" }} />
-              Weltkarte
-            </Link>
-          </li>
+              <li className="navItem">
+                <Link to="/weltkartepage">
+                  <FaGlobeEurope size={44} style={{ marginRight: "8px" }} />
+                  Weltkarte
+                </Link>
+              </li>
 
-          <li className="navItem">
-            <Link to="/reiseziel">
-              <FaMapMarkerAlt size={44} style={{ marginRight: "8px" }} />
-              Reiseziel
-            </Link>
-          </li>
+              {userRole === "ADMIN" && (
+                <li className="navItem">
+                  <Link to="/reiseziele">
+                    <FaMapMarkerAlt size={44} style={{ marginRight: "8px" }} />
+                    Reiseziele
+                  </Link>
+                </li>
+              )}
+            </>
+          )}
 
           {!isAuthenticated ? (
               <li className={loginClass}>

@@ -10,6 +10,8 @@ import ch.wiss.globenotes.security.JwtService; // WICHTIG: muss zu deinem Klasse
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import jakarta.annotation.PostConstruct;
+
 @Service
 public class AuthService {
 
@@ -21,6 +23,29 @@ public class AuthService {
         this.userRepo = userRepo;
         this.encoder = encoder;
         this.jwtService = jwtService;
+    }
+
+    @PostConstruct
+    public void initAdminUser() {
+        if (userRepo.findByUsername("admin").isEmpty()) {
+            AppUser admin = new AppUser();
+            admin.setUsername("admin");
+            admin.setEmail("admin@example.com");
+            admin.setPasswordHash(encoder.encode("admin123"));
+            admin.setRole(Role.ADMIN);
+            userRepo.save(admin);
+            System.out.println("Admin user created: username=admin, password=admin123");
+        }
+
+        if (userRepo.findByUsername("user").isEmpty()) {
+            AppUser user = new AppUser();
+            user.setUsername("user");
+            user.setEmail("user@example.com");
+            user.setPasswordHash(encoder.encode("user123"));
+            user.setRole(Role.USER);
+            userRepo.save(user);
+            System.out.println("User created: username=user, password=user123");
+        }
     }
 
     public AuthResponse register(RegisterRequestDTO req) {

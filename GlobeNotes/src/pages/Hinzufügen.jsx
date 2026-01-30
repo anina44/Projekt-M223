@@ -1,11 +1,6 @@
 import { useState } from "react";
 import "./Hinzufuegen.css";
-
-// Diese Komponente ermöglicht es Benutzern, neue Reiseziele hinzuzufügen.
-// Sie enthält ein Formular, in dem der Ort, das Jahr, Highlights, Kategorie und ein Bild hochgeladen werden können.
-// Nach dem Absenden des Formulars wird eine POST-Anfrage an den Server gesendet,
-// um die Daten zu speichern. Bei Erfolg wird eine Bestätigungsmeldung angezeigt.
-// Bei Fehlern wird eine entsprechende Fehlermeldung angezeigt.
+import { uploadReiseziel } from "../services/reiseziele-service";
 
 export default function Hinzufügen() {
   const [ort, setOrt] = useState("");
@@ -20,59 +15,55 @@ export default function Hinzufügen() {
     "Strandurlaub",
     "Abenteuer",
     "Natur",
-    "Historisch"
+    "Historisch",
   ];
 
-  // Funktion zum Absenden des Formulars
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage("");
+
+    if (!bildDatei) {
+      setMessage("Bitte ein Bild auswählen.");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("ort", ort.trim());
     formData.append("jahr", jahr.trim());
     formData.append("highlights", highlights.trim());
-    formData.append("bild", bildDatei);
     formData.append("kategorie", kategorie.trim());
+    formData.append("bild", bildDatei); // ⚠️ falls Backend "file" erwartet → ändern!
 
-    if (!bildDatei) {
-  alert("Bitte wähle ein Bild aus!");
-  return;
-}
+    try {
+      const res = await uploadReiseziel(formData);
 
-  // Sende die Daten an den Server
+      console.log("Upload erfolgreich:", res);
 
-   try {
-  const res = await fetch("http://localhost:8080/reiseziele/upload", {
-    method: "POST",
-    body: formData
-  });
+      setMessage("Reiseziel erfolgreich hinzugefügt!");
+      setOrt("");
+      setJahr("");
+      setHighlights("");
+      setKategorie("");
+      setBildDatei(null);
+    } catch (err) {
+      console.error("Upload-Fehler:", err);
 
-  // Überprüfe die Antwort des Servers
-  if (res.ok) {
-    setMessage("Reiseziel erfolgreich hinzugefügt!");
-    setOrt("");
-    setJahr("");
-    setHighlights("");
-    setBildDatei(null);
-    setKategorie("");
-  } else {
-    const fehlertext = await res.text(); // Lies die Fehlermeldung vom Backend
-    setMessage("Fehler beim Speichern: " + fehlertext);
-  }
-} catch (err) {
-  console.error("Fehler beim Senden:", err);
-  setMessage("Netzwerkfehler: " + err.message);
-}
+      const errorMsg =
+        err.response?.data?.message ||
+        (typeof err.response?.data === "string" ? err.response.data : null) ||
+        err.message;
 
+      setMessage("Fehler beim Speichern: " + errorMsg);
+    }
   };
 
-// Render das Formular
   return (
     <div className="form-container">
-      <h2>Neues Reise hinzufügen</h2>
+      <h2>Neues Reiseziel hinzufügen</h2>
+
       <form onSubmit={handleSubmit} className="reise-form">
         <label>
-          Ort: 
+          Ort:
           <input
             type="text"
             value={ort}
@@ -80,9 +71,9 @@ export default function Hinzufügen() {
             required
           />
         </label>
-        <br />
+
         <label>
-          Jahr: 
+          Jahr:
           <input
             type="text"
             value={jahr}
@@ -90,9 +81,9 @@ export default function Hinzufügen() {
             required
           />
         </label>
-        <br />
+
         <label>
-          Highlights: 
+          Highlights:
           <input
             type="text"
             value={highlights}
@@ -100,30 +91,37 @@ export default function Hinzufügen() {
             required
           />
         </label>
-        <br />
-        <label className="Kategorie">Kategorie:</label>
-        <select
-          value={kategorie}
-          onChange={(e) => setKategorie(e.target.value)}
-        >
-          <option className="wählen" value="">-- bitte wählen --</option>
-          {kategorien.map((k, i) => (
-            <option key={i} value={k}>
-              {k}
-            </option>
-          ))}
-        </select>
-        <br />
-        <label className="foto">
-          Foto: 
-             <input type="file" accept="image/*" onChange={(e) => 
-              setBildDatei(e.target.files[0])} />
+
+        <label>
+          Kategorie:
+          <select
+            value={kategorie}
+            onChange={(e) => setKategorie(e.target.value)}
+            required
+          >
+            <option value="">-- bitte wählen --</option>
+            {kategorien.map((k, i) => (
+              <option key={i} value={k}>
+                {k}
+              </option>
+            ))}
+          </select>
         </label>
-        <br />
-        <br />
+
+        <label>
+          Foto:
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setBildDatei(e.target.files[0])}
+            required
+          />
+        </label>
+
         <button type="submit">Abspeichern</button>
       </form>
-      <p>{message}</p>
+
+      {message && <p>{message}</p>}
     </div>
   );
 }

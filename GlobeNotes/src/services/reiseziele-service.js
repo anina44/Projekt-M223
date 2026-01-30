@@ -8,3 +8,12 @@ export const getReiseziele = async () => {
 export const deleteReiseziel = async (id) => {
     await api.delete(`/api/reiseziele/${id}`);
 };
+
+export const uploadReiseziel = async (formData) => {
+    const res = await api.post("/api/reiseziele/upload", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+    return res.data;
+};

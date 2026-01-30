@@ -21,6 +21,7 @@ import ch.wiss.globenotes.model.Reiseziel;
 import ch.wiss.globenotes.repository.KategorieRepository;
 import ch.wiss.globenotes.repository.ReisezielRepository;
 import ch.wiss.globenotes.model.Kategorie;
+import ch.wiss.globenotes.model.Role;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -44,21 +45,12 @@ public class ReisezielController {
      */
     @GetMapping
     public List<Reiseziel> getMeine(@AuthenticationPrincipal AppUser user) {
+        if (user.getRole() == Role.ADMIN) {
+            return repository.findAll();
+        }
         return repository.findByOwnerId(user.getId());
     }
 
-
-    /** 
-     * Liefert ein einzelnes Reiseziel basierend auf der ID.
-
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadReiseziel(@RequestBody Reiseziel reiseziel) {
-        return ResponseEntity.ok("Upload erfolgreich");
-    }*/
-
-    /** 
-     * Liefert ein einzelnes Reiseziel basierend auf der ID.
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> loeschen(@AuthenticationPrincipal AppUser user, @PathVariable Long id) {
 
@@ -89,7 +81,7 @@ public class ReisezielController {
             @RequestParam("bild") MultipartFile bildDatei
     ) {
         try {
-            String ordner = "uploads/";
+            String ordner = "/uploads/";
             Files.createDirectories(Paths.get(ordner));
 
             String eindeutigerName = java.util.UUID.randomUUID() + "_" + bildDatei.getOriginalFilename();
@@ -103,7 +95,7 @@ public class ReisezielController {
             neuesZiel.setJahr(jahr);
             neuesZiel.setHighlights(highlights);
             neuesZiel.setKategorie(gespeicherteKategorie);
-            neuesZiel.setBildPfad("/uploads/" + eindeutigerName);
+            neuesZiel.setBildUrl("/uploads/" + eindeutigerName);
             neuesZiel.setOwner(user);
 
 
