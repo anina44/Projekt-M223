@@ -54,20 +54,20 @@ public class SecurityConfig {
                         .requestMatchers("/uploads/**").permitAll()
  
                         // =========================
-                        // ✅ Reiseziele Regeln
+                        // ✅  Regeln
                         // =========================
  
                         // GET: jeder eingeloggte User
-                        .requestMatchers(HttpMethod.GET, "/api/reiseziele/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/reiseziel/**").authenticated()
  
                         // POST (inkl. /upload): USER + ADMIN
-                        .requestMatchers(HttpMethod.POST, "/api/reiseziele/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/reiseziel/**").hasAnyRole("USER", "ADMIN")
  
                         // PUT: USER + ADMIN (falls du edit endpoints hast)
-                        .requestMatchers(HttpMethod.PUT, "/api/reiseziele/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/reiseziel/**").hasAnyRole("USER", "ADMIN")
  
                         // DELETE: nur ADMIN (oder ändere zu hasAnyRole wenn USER löschen darf)
-                        .requestMatchers(HttpMethod.DELETE, "/api/reiseziele/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/reiseziel/**").hasRole("ADMIN")
  
                         // 🔒 Rest braucht JWT
                         .anyRequest().authenticated()

@@ -26,7 +26,7 @@ function App() {
 
                 {/* admin only */}
                 <Route element={<AdminProtectedRoute />}>
-                    <Route path="reiseziele" element={<Reiseziel />} />
+                    <Route path="reiseziel" element={<Reiseziel />} />
                 </Route>
             </Route>
         </Routes>

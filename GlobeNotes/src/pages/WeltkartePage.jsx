@@ -3,9 +3,8 @@ import Weltkarte from "../components/Weltkarte";
 import api from "../services/api-client"; // 👈 wichtig
 import { AuthContext } from "../auth/AuthContext";
 
-// Diese Seite zeigt die Weltkarte mit den Reisezielen an
 export default function WeltkartePage() {
-    const [reiseziele, setReiseziele] = useState([]);
+    const [reiseziel, setReiseziel] = useState([]);
     const { user } = useContext(AuthContext);
 
     useEffect(() => {
@@ -13,11 +12,11 @@ export default function WeltkartePage() {
         if (!token) return;
 
         api
-            .get("/api/reiseziele") // 👈 gleicher Endpoint wie Home
+            .get("/api/reiseziel") // 👈 gleicher Endpoint wie Home
             .then((res) => {
                 const data = res.data;
                 console.log("Geladene Daten (Weltkarte):", data);
-                setReiseziele(Array.isArray(data) ? data : []);
+                setReiseziel(Array.isArray(data) ? data : []);
             })
             .catch((err) => {
                 console.error(
@@ -25,13 +24,13 @@ export default function WeltkartePage() {
                     err?.response?.status,
                     err?.response?.data || err.message
                 );
-                setReiseziele([]);
+                setReiseziel([]);
             });
     }, []);
 
     return (
         <div>
-            <Weltkarte reiseziele={reiseziele} />
+            <Weltkarte reiseziel={reiseziel} />
         </div>
     );
 }

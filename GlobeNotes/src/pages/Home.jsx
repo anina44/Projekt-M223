@@ -6,7 +6,7 @@ import api from "../services/api-client"; // Pfad anpassen!
 import { AuthContext } from "../auth/AuthContext";
 
 export default function Home() {
-    const [reiseziele, setReiseziele] = useState([]);
+    const [reiseziel, setReiseziel] = useState([]);
     const [sortierung, setSortierung] = useState("standard");
     const [kategorie, setKategorie] = useState("");
     const { user } = useContext(AuthContext);
@@ -15,22 +15,22 @@ export default function Home() {
     const token = localStorage.getItem("token");
     if (!token) return; // noch nicht eingeloggt
 
-    api.get("/api/reiseziele")
+    api.get("/api/reiseziel")
       .then((res) => {
         const data = res.data;
-        setReiseziele(Array.isArray(data) ? data : []);
+        setReiseziel(Array.isArray(data) ? data : []);
       })
       .catch((err) => {
         console.error("Fehler beim Laden:", err);
-        setReiseziele([]);
+        setReiseziel([]);
       });
   }, []);
 
 
     const handleDelete = async (id) => {
         try {
-            await api.delete(`/api/reiseziele/${id}`);
-            setReiseziele((prev) => prev.filter((ziel) => ziel.id !== id));
+            await api.delete(`/api/reiseziel/${id}`);
+            setReiseziel((prev) => prev.filter((ziel) => ziel.id !== id));
         } catch (err) {
             console.error("Löschen fehlgeschlagen:", err);
         }
@@ -38,16 +38,16 @@ export default function Home() {
 
   // Alle Kategorien für das Dropdown ermitteln
   const kategorien = Array.from(
-  new Set(reiseziele.map(ziel => ziel.kategorie?.name).filter(Boolean))
+  new Set(reiseziel.map(ziel => ziel.kategorie?.name).filter(Boolean))
   );
 
   // Nach Kategorie filtern
-  const gefilterteReiseziele = kategorie
-    ? reiseziele.filter(ziel => ziel.kategorie?.name === kategorie)
-    : reiseziele;
+  const gefilterteReiseziel = kategorie
+    ? reiseziel.filter(ziel => ziel.kategorie?.name === kategorie)
+    : reiseziel;
 
-    // Sortieren der gefilterten Reiseziele
-const sortierteReiseziele = [...gefilterteReiseziele].sort((a, b) => {
+    // Sortieren der gefilterten 
+const sortierteReiseziel = [...gefilterteReiseziel].sort((a, b) => {
   if (sortierung === "jahr aufsteigend") return a.jahr.localeCompare(b.jahr);
   if (sortierung === "jahr absteigend") return b.jahr.localeCompare(a.jahr);
   if (sortierung === "name") return a.ort.localeCompare(b.ort);
@@ -81,10 +81,10 @@ const sortierteReiseziele = [...gefilterteReiseziele].sort((a, b) => {
 
 
         <div className="reise-container">
-            {sortierteReiseziele.length === 0 ? (
-                <p>Keine Reiseziele vorhanden. Füge eines hinzu!</p>
+            {sortierteReiseziel.length === 0 ? (
+                <p>Keine Reiseziel vorhanden. Füge eines hinzu!</p>
             ) : (
-                sortierteReiseziele.map((ziel, i) => (
+                sortierteReiseziel.map((ziel, i) => (
                     <Reisebox
                         key={ziel.id || i}
                         id={ziel.id}

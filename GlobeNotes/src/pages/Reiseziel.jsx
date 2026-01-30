@@ -1,10 +1,7 @@
 import { useState } from 'react';
 
-// Dieser Komponente ermöglicht es dem Benutzer, eine Liste von Reisezielen zu verwalten.
-// Der Benutzer kann neue Reiseziele hinzufügen, bestehende löschen und die Reihenfolge ändern.
-
 export default function Reiseziel() {
-  const [reiseziele, setReiseziele] = useState(["Paris", "Berlin", "New York"]);
+  const [reiseziel, setReiseziel] = useState(["Paris", "Berlin", "New York"]);
   const [newreiseziel, setNewReiseziel] = useState('');
 
   function handleInputChange(event) {
@@ -14,41 +11,39 @@ export default function Reiseziel() {
   function addReiseziel() {
 
     if(newreiseziel.trim() !== '') {
-    setReiseziele(t => [...reiseziele, newreiseziel]);
+    setReiseziel(t => [...reiseziel, newreiseziel]);
     setNewReiseziel('');
     }
   }
 
   function deleteReiseziel(index) {
     
-    const updatedReiseziel = reiseziele.filter((element, i) => i !== index);
-    setReiseziele(updatedReiseziel); 
+    const updatedReiseziel = reiseziel.filter((element, i) => i !== index);
+    setReiseziel(updatedReiseziel); 
   }  
 
   function moveReisezielUp(index) {
     if(index > 0) {
-      const updatedReiseziel =  [...reiseziele];
+      const updatedReiseziel =  [...reiseziel];
       [updatedReiseziel[index], updatedReiseziel[index - 1]] = 
       [updatedReiseziel[index - 1], updatedReiseziel[index]];
-      setReiseziele(updatedReiseziel);
+      setReiseziel(updatedReiseziel);
     }
   }
 
   function moveReisezielDown(index) {
-    if(index < reiseziele.length - 1) {
-          const updatedReiseziel =  [...reiseziele];
+    if(index < reiseziel.length - 1) {
+          const updatedReiseziel =  [...reiseziel];
           [updatedReiseziel[index], updatedReiseziel[index + 1]] = 
           [updatedReiseziel[index + 1], updatedReiseziel[index]];
-          setReiseziele(updatedReiseziel);
+          setReiseziel(updatedReiseziel);
         }
   } 
 
-  // Rendern der Komponente
-  // Die Komponente zeigt ein Eingabefeld für neue Reiseziele, eine Liste
   return (
     <div className="Reiseziel">
       <header className="Reiseziel-header">
-        <h3>Füge deine Wunsch Reiseziele ein</h3>
+        <h3>Füge deine Wunsch Reiseziel ein</h3>
         <div>
           <input
             type="text"
@@ -64,7 +59,7 @@ export default function Reiseziel() {
 
           <div className="Reiseziel-content">
         <ol>
-          {reiseziele.map((reiseziel, index) =>
+          {reiseziel.map((reiseziel, index) =>
             <li key={index}>
               <span className="text">{reiseziel}</span>
               <button

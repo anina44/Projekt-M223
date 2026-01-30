@@ -31,7 +31,7 @@ import ch.wiss.globenotes.model.AppUser;
 
 @CrossOrigin(origins = {"http://localhost:5173", "http://localhost", "http://localhost:80"})
 @RestController
-@RequestMapping("/api/reiseziele")
+@RequestMapping("/api/reiseziel")
 public class ReisezielController {
 
     @Autowired
@@ -41,7 +41,7 @@ public class ReisezielController {
     private KategorieRepository kategorieRepository;
 
     /** 
-     * Liefert alle Reiseziele zurück.
+     * Liefert alle  zurück.
      */
     @GetMapping
     public List<Reiseziel> getMeine(@AuthenticationPrincipal AppUser user) {

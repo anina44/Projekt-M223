@@ -16,7 +16,7 @@ public class ReisezielService {
         this.repo = repo;
     }
 
-    public List<Reiseziel> findMyReiseziele(AppUser user) {
+    public List<Reiseziel> findMyReiseziel(AppUser user) {
         return repo.findByOwnerId(user.getId());
     }
 

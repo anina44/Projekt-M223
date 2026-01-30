@@ -69,7 +69,7 @@ export default function Navigation() {
                 <li className="navItem">
                   <Link to="/reiseziel">
                     <FaMapMarkerAlt size={44} style={{ marginRight: "8px" }} />
-                    Reiseziele
+                    Reiseziel verwalten
                   </Link>
                 </li>
               )}

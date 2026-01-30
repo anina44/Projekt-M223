@@ -37,10 +37,9 @@ public class UnitTests {
         repository.save(beispielZiel);
     }
 
-    // U1: GET alle Reiseziele
     @Test
-    void getAlleReiseziele() throws Exception {
-        mockMvc.perform(get("/reiseziele/"))
+    void getAlleReiseziel() throws Exception {
+        mockMvc.perform(get("/reiseziel/"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].ort", is("Paris")));
@@ -58,7 +57,7 @@ public class UnitTests {
                 }
                 """;
 
-        mockMvc.perform(post("/reiseziele/")
+        mockMvc.perform(post("/reiseziel/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(neuesReiseziel))
                 .andExpect(status().isCreated())
@@ -76,7 +75,7 @@ public class UnitTests {
                 }
                 """;
 
-        mockMvc.perform(post("/reiseziele/")
+        mockMvc.perform(post("/reiseziel/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(invalidReiseziel))
                 .andExpect(status().isBadRequest());
@@ -85,14 +84,14 @@ public class UnitTests {
     // U4: DELETE Reiseziel
     @Test
     void deleteReiseziel() throws Exception {
-        mockMvc.perform(delete("/reiseziele/" + beispielZiel.getId()))
+        mockMvc.perform(delete("/reiseziel/" + beispielZiel.getId()))
                 .andExpect(status().isNoContent());
     }
 
     // U5: GET Reiseziel nach ID
     @Test
     void getReisezielById() throws Exception {
-        mockMvc.perform(get("/reiseziele/" + beispielZiel.getId()))
+        mockMvc.perform(get("/reiseziel/" + beispielZiel.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.ort", is("Paris")));
     }
