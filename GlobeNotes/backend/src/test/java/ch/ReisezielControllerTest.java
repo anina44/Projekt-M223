@@ -37,7 +37,7 @@ public class ReisezielControllerTest {
     }
 
     @Test
-    public void testGetReisezieleEmpty() throws Exception {
+    public void testGetReisezieleEmpty() throws Exception  {
         // Mock leere Liste
         when(repository.findByOwnerId(anyLong())).thenReturn(List.of());
 
