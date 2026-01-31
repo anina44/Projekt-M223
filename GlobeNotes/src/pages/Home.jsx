@@ -92,7 +92,7 @@ const sortierteReiseziel = [...gefilterteReiseziel].sort((a, b) => {
                         jahr={ziel.jahr}
                         highlights={ziel.highlights}
                         kategorie={ziel.kategorie}
-                        bildPfad={ziel.bildPfad}
+                        bildPfad={ziel.bildUrl}
                         onDelete={handleDelete}
                     />
                 ))
