@@ -79,12 +79,15 @@ button:focus-visible {
   border: 2px solid #ccc;
 }
 
-input[type="text"]{
+input[type="text"],
+input[type="password"] {
   font-size: 1em;
   padding: 10px;
   border: 2px solid #ccc;
   border-radius: 8px;
+  box-sizing: border-box;
 }
+
 
 ol {
   padding: 0;
